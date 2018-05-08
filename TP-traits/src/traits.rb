@@ -1,9 +1,18 @@
 module GeneradorMetodos
-  def uses(trait)
+  def uses(trait, estrategia = nil)
     trait.singleton_methods.each do |method_sym|
       metodo = trait.method(method_sym)
       self.method(:define_method).call(method_sym, &metodo)
     end
+    if estrategia != nil
+      estrategia.call(trait, self)
+    end
+  end
+end
+
+class EstrategiaTodos
+  def self.call(trait, clase)
+
   end
 end
 
@@ -25,26 +34,28 @@ class Trait
   def +(other_trait)
     nuevo_trait = Trait.new
 
-    nuevo_trait.singleton_class.uses(self)
-    nuevo_trait.singleton_class.uses(other_trait)
-
+    metodosSuma = self.obtenerMetodos + other_trait.obtenerMetodos
+    metodosRepetidos = self.conflictos + other_trait.conflictos
     nombres_repetidos = self.singleton_methods & other_trait.singleton_methods
-    nuevo_trait.conflictos = self.conflictos + other_trait.conflictos
-    nuevo_trait.conflictos += (self.obtenerMetodos + other_trait.obtenerMetodos).select { |x| nombres_repetidos.include?( x.name ) }
-    # nuevo_trait.conflictos = metodos.collect { |met| met.to_proc}
-    nuevo_trait.limpiar_metodos_conflictivos
+    metodosRepetidos += metodosSuma.select { |x| nombres_repetidos.include?( x.name ) }
+    nuevo_trait.agregarConflictos metodosRepetidos
+    metodosSinConflictos = metodosSuma.reject { |x| nuevo_trait.conflictos.include?( x ) }
 
+    metodosSinConflictos.each do |m|
+      nuevo_trait.singleton_class.method(:define_method).call(m.name, &m)
+    end
     nuevo_trait
   end
 
-  def limpiar_metodos_conflictivos
-    self.singleton_methods.each do |nombre|
-      if self.conflictos.map{|x| x.name}.include? nombre
-        self.conflictos.push(self.method(nombre))
-        self.singleton_class.send(:remove_method, nombre)
+  def agregarConflictos(lista_metodos)
+    lista_metodos.each do |m|
+      unless self.conflictos.include? m
+        self.conflictos.push(m)
       end
     end
   end
+
+
   def obtenerMetodos
     self.singleton_methods.collect do |simbolo|
       self.method simbolo
@@ -117,9 +128,15 @@ trait2 = Trait.define do
   end
 end
 
-TraitConflictivo = MiTrait + MiTrait2
-TC2 = TraitConflictivo + MiTrait2
+TC1 = MiTrait + MiTrait2
+TC2 = TC1 + MiTrait2
+TC3 = MiTrait2 + MiTrait2
+TC4 = MiTrait + MiTrait
 
 class A
-  uses MiTrait + MiTrait2
+  uses (MiTrait + MiTrait2), EstrategiaTodos
 end
+
+# class A
+#   uses MiTrait << (:metodo1 > :saludo)
+# end
