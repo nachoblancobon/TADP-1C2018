@@ -12,7 +12,21 @@ end
 
 class EstrategiaTodos
   def self.call(trait, clase)
+    conflictos = trait.conflictos
+    nombresMetodosACrear = (conflictos.map {|x| x.name}).uniq
+    nombresMetodosACrear.each do |nom|
+      clase.method(:define_method).call(nom, self.bindear_conflictos(conflictos.select {|x| x.name === nom}))
+    end
+  end
 
+  def self.bindear_conflictos(conflictos)
+    Proc.new do
+      conflictos.each do |x|
+        x.call()
+      end
+      # conflictos.first.call()
+      # conflictos.last.call()
+    end
   end
 end
 
@@ -114,7 +128,7 @@ end
 trait = Trait.define do
   name :MiTrait
   new_method :metodo1 do
-    "Hola"
+    puts "Hola"
   end
   new_method :metodo2 do |un_numero|
     un_numero * 0 + 42
@@ -124,7 +138,21 @@ end
 trait2 = Trait.define do
   name :MiTrait2
   new_method :metodo1 do
-    "Chau"
+    puts "Chau"
+  end
+end
+
+
+trait3 = Trait.define do
+  name :MiTrait3
+  new_method :m do
+    puts "metodo m trait3"
+  end
+end
+trait4 = Trait.define do
+  name :MiTrait4
+  new_method :m do
+    puts "metodo m trait4"
   end
 end
 
@@ -134,7 +162,7 @@ TC3 = MiTrait2 + MiTrait2
 TC4 = MiTrait + MiTrait
 
 class A
-  uses (MiTrait + MiTrait2), EstrategiaTodos
+  uses MiTrait3+ MiTrait4, EstrategiaTodos
 end
 
 # class A
