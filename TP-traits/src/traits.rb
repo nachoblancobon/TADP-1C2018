@@ -20,12 +20,12 @@ class EstrategiaTodos
   end
 
   def self.bindear_conflictos(conflictos)
-    Proc.new do
+    Proc.new do |*args|
+      res=nil
       conflictos.each do |x|
-        x.call()
+        res = x.call(*args)
       end
-      # conflictos.first.call()
-      # conflictos.last.call()
+      res
     end
   end
 end
@@ -143,16 +143,30 @@ trait2 = Trait.define do
 end
 
 
-trait3 = Trait.define do
+Trait.define do
   name :MiTrait3
   new_method :m do
     puts "metodo m trait3"
   end
 end
-trait4 = Trait.define do
+Trait.define do
   name :MiTrait4
   new_method :m do
     puts "metodo m trait4"
+  end
+end
+Trait.define do
+  name :MiTrait5
+  new_method :suma do |a, b|
+    puts a+b
+    a+b
+  end
+end
+Trait.define do
+  name :MiTrait6
+  new_method :suma do |a, b|
+    puts a+b+1
+    a+b+1
   end
 end
 
@@ -163,6 +177,10 @@ TC4 = MiTrait + MiTrait
 
 class A
   uses MiTrait3+ MiTrait4, EstrategiaTodos
+end
+
+class B
+  uses MiTrait5 + MiTrait6, EstrategiaTodos
 end
 
 # class A
