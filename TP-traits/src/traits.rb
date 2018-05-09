@@ -1,33 +1,35 @@
 module GeneradorMetodos
-  def uses(trait, estrategia = nil)
+  def uses(trait, &estrategia)
     trait.singleton_methods.each do |method_sym|
       metodo = trait.method(method_sym)
       self.method(:define_method).call(method_sym, &metodo)
     end
-    if estrategia != nil
-      estrategia.call(trait, self)
+
+    if block_given?
+      conflictos = trait.conflictos
+      nombresMetodosACrear = (conflictos.map {|x| x.name}).uniq
+
+      nombresMetodosACrear.each do |nom|
+        self.method(:define_method).call(nom, Estrategia.bindear_conflictos(conflictos.select {|x| x.name === nom}, estrategia))
+      end
     end
   end
 end
 
-class EstrategiaTodos
-  def self.call(trait, clase)
-    conflictos = trait.conflictos
-    nombresMetodosACrear = (conflictos.map {|x| x.name}).uniq
-    nombresMetodosACrear.each do |nom|
-      clase.method(:define_method).call(nom, self.bindear_conflictos(conflictos.select {|x| x.name === nom}))
-    end
-  end
-
-  def self.bindear_conflictos(conflictos)
+class Estrategia
+  def self.bindear_conflictos(conflictos, estrategia)
     Proc.new do |*args|
-      res=nil
-      conflictos.each do |x|
-        res = x.call(*args)
-      end
-      res
+      estrategia.call(conflictos, *args)
     end
   end
+end
+
+BloqueEstTodos= Proc.new do |conflictos, *args|
+  res=nil
+  conflictos.each do |x|
+    res = x.call(*args)
+  end
+  res
 end
 
 class Trait
@@ -176,13 +178,19 @@ TC3 = MiTrait2 + MiTrait2
 TC4 = MiTrait + MiTrait
 
 class A
-  uses MiTrait3+ MiTrait4, EstrategiaTodos
+  uses MiTrait5+ MiTrait6 do |conflictos, *args|
+    res=0
+    conflictos.each do |x|
+      res += x.call(*args)
+    end
+    res
+  end
 end
 
 class B
-  uses MiTrait5 + MiTrait6, EstrategiaTodos
+  uses MiTrait5 + MiTrait6, &BloqueEstTodos
 end
 
-# class A
-#   uses MiTrait << (:metodo1 > :saludo)
-# end
+
+a= A.new
+a.suma 1,2
