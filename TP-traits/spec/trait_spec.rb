@@ -28,5 +28,30 @@ describe 'Tests de traits' do
     clase.saludo.should == "Hola"
     clase.metodo2(1).should == 42
   end
+  
+  it 'Si usa estrategia Todos devuelve como si ubiese ejecutado todos los metodos conflictivos' do
+    b = B.new
+    b.metodo1.should == "Chau"
+  end
+
+  it 'Si usa estrategia Fold devuelve el resultado de aplicar la funcion a los resultados parciales'do
+    c = C.new
+    c.m {|x,y| x*y}.should == 20
+  end
+
+  it 'Si usa estrategia Condicional devuelve el primer que cumpla la condicion de la funcion' do
+    d = Condicional.new
+    d.m {|x| x>1}.should == 2
+  end
+
+  it 'Si tengo estrategia fold con una funcion que sume suma cada resultado' do
+    superman = SuperGuerrero.new
+    superman.atacar(10){|x,y| x+y}.should == 120
+  end
+
+  it 'Si creo una estrategia sume resultados de los metodos conflictivos devuelve bien' do
+    a = A.new
+    a.suma(1,2).should == 7
+  end
 end
 

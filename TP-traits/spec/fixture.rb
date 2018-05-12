@@ -34,6 +34,53 @@ Trait.define do
     self.var=self.var-2
   end
 end
+Trait.define do
+  name :MiTrait3
+  new_method :m do
+    puts "metodo m trait3"
+    1
+  end
+end
+
+Trait.define do
+  name :MiTrait4
+  new_method :m do
+    puts "metodo m trait4"
+    2
+  end
+end
+Trait.define do
+  name :MiTrait7
+  new_method :m do
+    puts "metodo m trait7"
+    10
+  end
+end
+Trait.define do
+  name :MiTrait5
+  new_method :suma do |a, b|
+    a+b
+  end
+end
+Trait.define do
+  name :MiTrait6
+  new_method :suma do |a, b|
+    a+b+1
+  end
+end
+
+Trait.define do
+  name :Guerrero
+  new_method :atacar do |potencialOfensivo|
+    potencialOfensivo * 2
+  end
+end
+Trait.define do
+  name :Misil
+  new_method :atacar do |potencialOfensivo|
+    potencialOfensivo * 10
+  end
+end
 
 class MiClase
   uses MiTrait
@@ -53,4 +100,30 @@ end
 
 class ConAlias
   uses MiTrait << (:metodo1 > :saludo)
+end
+
+class A
+  uses MiTrait5 + MiTrait6 do |conflictos, args|
+    res=0
+    conflictos.each do |x|
+      res += x.call(*args)
+    end
+    res
+  end
+end
+
+class B
+  uses MiTrait + MiOtroTrait, &EstTodos
+end
+
+class C
+  uses MiTrait3 + MiTrait4 + MiTrait7, &EstFold
+end
+
+class SuperGuerrero
+  uses Guerrero + Misil, &EstFold
+end
+
+class Condicional
+  uses MiTrait3 + MiTrait4 + MiTrait7, &EstCondicional
 end

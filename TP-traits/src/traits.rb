@@ -24,9 +24,8 @@ class Estrategia
     end
   end
 end
-
 EstTodos= Proc.new do |conflictos, args|
-  res=nil
+  res = nil
   conflictos.each do |x|
     res = x.call(*args)
   end
@@ -136,121 +135,4 @@ class Symbol
 end
 
 
-#### Ejemplo de uso ####
 
-trait = Trait.define do
-  name :MiTrait
-  new_method :metodo1 do
-    puts "Hola"
-  end
-  new_method :metodo2 do |un_numero|
-    un_numero * 0 + 42
-  end
-end
-
-trait2 = Trait.define do
-  name :MiTrait2
-  new_method :metodo1 do
-    puts "Chau"
-  end
-end
-
-
-Trait.define do
-  name :MiTrait3
-  new_method :m do
-    puts "metodo m trait3"
-    1
-  end
-end
-Trait.define do
-  name :MiTrait4
-  new_method :m do
-    puts "metodo m trait4"
-    2
-  end
-end
-Trait.define do
-  name :MiTrait7
-  new_method :m do
-    puts "metodo m trait7"
-    10
-  end
-end
-Trait.define do
-  name :MiTrait5
-  new_method :suma do |a, b|
-    # puts a+b
-    a+b
-  end
-end
-Trait.define do
-  name :MiTrait6
-  new_method :suma do |a, b|
-    # puts a+b+1
-    a+b+1
-  end
-end
-
-Trait.define do
-  name :Guerrero
-  new_method :atacar do |potencialOfensivo|
-    potencialOfensivo * 2
-  end
-end
-Trait.define do
-  name :Misil
-  new_method :atacar do |potencialOfensivo|
-    potencialOfensivo * 10
-  end
-end
-
-# TC1 = MiTrait + MiTrait2
-# TC2 = TC1 + MiTrait2
-# TC3 = MiTrait2 + MiTrait2
-# TC4 = MiTrait + MiTrait
-
-class A
-  uses MiTrait5+ MiTrait6 do |conflictos, args|
-    res=0
-    conflictos.each do |x|
-      res += x.call(*args)
-    end
-    res
-  end
-end
-
-class B
-  uses MiTrait5 + MiTrait6, &EstTodos
-end
-
-
-class C
-  uses MiTrait3 + MiTrait4 + MiTrait7, &EstFold
-end
-
-class SuperGuerrero
-  uses Guerrero + Misil, &EstFold
-end
-
-class Condicional
-  uses MiTrait3 + MiTrait4 + MiTrait7, &EstCondicional
-end
-
-a= A.new
-a.suma 1,2
-
-c= C.new
-c.m do|x,y|
-  x*y
-end
-
-
-superman = SuperGuerrero.new
-superman.atacar(10) {|x,y| x+y}
-
-b = B.new
-b.suma 1,2
-
-c = Condicional.new
-puts (c.m do |val| val>1 end)
