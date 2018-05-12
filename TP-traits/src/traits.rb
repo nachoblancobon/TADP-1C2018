@@ -1,3 +1,5 @@
+require_relative '../../TP-traits/src/estrategia.rb'
+
 module GeneradorMetodos
   def uses(trait, &estrategia)
     trait.singleton_methods.each do |method_sym|
@@ -17,37 +19,7 @@ module GeneradorMetodos
   end
 end
 
-class Estrategia
-  def self.bindear_conflictos(conflictos, estrategia)
-    Proc.new do |*args, &bloque|
-      estrategia.call(conflictos, args, &bloque)
-    end
-  end
-end
-EstTodos= Proc.new do |conflictos, args|
-  res = nil
-  conflictos.each do |x|
-    res = x.call(*args)
-  end
-  res
-end
 
-EstFold = Proc.new do |conflictos, args, &funcion|
-  res = conflictos.shift.call(*args)
-  conflictos.each do |x|
-    res = funcion.call(res, x.call(*args))
-  end
-  res
-end
-
-EstCondicional = Proc.new do |conflictos, args, &funcion|
-  res = nil
-  conflictos.each do |x|
-    res = x.call(*args)
-    break if funcion.call(res)
-  end
-  res
-end
 
 class Trait
   attr_accessor :conflictos

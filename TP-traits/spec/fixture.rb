@@ -102,28 +102,30 @@ class ConAlias
   uses MiTrait << (:metodo1 > :saludo)
 end
 
-class A
-  uses MiTrait5 + MiTrait6 do |conflictos, args|
-    res=0
-    conflictos.each do |x|
-      res += x.call(*args)
-    end
-    res
+EstNueva = Proc.new do |conflictos, args|
+  res=0
+  conflictos.each do |x|
+    res += x.call(*args)
   end
+  res
+end
+
+class A
+  uses MiTrait5 + MiTrait6 ,&EstNueva
 end
 
 class B
-  uses MiTrait + MiOtroTrait, &EstTodos
+  uses MiTrait + MiOtroTrait, &Estrategia.estrategia_mostrar_todos
 end
 
 class C
-  uses MiTrait3 + MiTrait4 + MiTrait7, &EstFold
+  uses MiTrait3 + MiTrait4 + MiTrait7, &Estrategia.estrategia_fold 
 end
 
 class SuperGuerrero
-  uses Guerrero + Misil, &EstFold
+  uses Guerrero + Misil, &Estrategia.estrategia_fold
 end
 
 class Condicional
-  uses MiTrait3 + MiTrait4 + MiTrait7, &EstCondicional
+  uses MiTrait3 + MiTrait4 + MiTrait7, &Estrategia.estrategia_condicional
 end

@@ -3,7 +3,7 @@ require_relative '../../TP-traits/spec/fixture.rb'
 
 describe 'Tests de traits' do
 
-  it 'Una clase usa el un trait ok' do
+  it 'Una clase usa el un trait' do
     clase = MiClase.new
     clase.metodo1.should == "mundo"
     clase.metodo2(3).should == 42
@@ -28,7 +28,7 @@ describe 'Tests de traits' do
     clase.saludo.should == "Hola"
     clase.metodo2(1).should == 42
   end
-  
+
   it 'Si usa estrategia Todos devuelve como si ubiese ejecutado todos los metodos conflictivos' do
     b = B.new
     b.metodo1.should == "Chau"
