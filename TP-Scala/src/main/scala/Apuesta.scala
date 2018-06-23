@@ -10,7 +10,7 @@ case class Apuesta(montoApostado: Int, jugadas: List[Jugada]){
 case class Apuestas(apuestas: List[Apuesta], juegos: List[Juego]){
   require(apuestas.lengthCompare(juegos.size) == 0)
   def resultadosPosibles(montoInicial: Int): DistribucionResultados = apuestas.zip(juegos)
-    .foldLeft(DistribucionResultados(Set(EscenarioPosible(montoInicial)))) { (resultadoAnterior, apuestaJuego) => {
+    .foldLeft(DistribucionResultados(List(EscenarioPosible(montoInicial)))) { (resultadoAnterior, apuestaJuego) => {
       val (apuesta, juego) = apuestaJuego
 
       resultadoAnterior.obtenerResultadosPosiblesPara(apuesta, juego.distribucionResultados)
@@ -30,7 +30,7 @@ case class Juego(distribucionResultados: DistribucionProbabilidad){
   def proximoResultado:Suceso = distribucionResultados.proximoSuceso()
 }
 
-case class DistribucionResultados(escenarios: Set[EscenarioPosible]){
+case class DistribucionResultados(escenarios: List[EscenarioPosible]){
   def obtenerResultadosPosiblesPara(apuesta: Apuesta, distribucion: DistribucionProbabilidad):DistribucionResultados =
     copy(escenarios = for {
       escenariosPosibles <- escenarios
@@ -52,11 +52,11 @@ case class EscenarioPosible(monto: Int, probabilidad: Double = 1.0){
 
   val gananciaPonderada:Double = monto * probabilidad
 
-  def jugar(jugadas: List[Jugada], montoApostado: Int, distribucion: DistribucionProbabilidad): Set[EscenarioPosible] =
+  def jugar(jugadas: List[Jugada], montoApostado: Int, distribucion: DistribucionProbabilidad): List[EscenarioPosible] =
     if(monto < montoApostado){
-      Set(this)
+      List(this)
     }else{
-      jugadas.foldLeft(Set(this)){ (escenariosPosibles: Set[EscenarioPosible], jugada: Jugada) =>
+      jugadas.foldLeft(List(this)){ (escenariosPosibles: List[EscenarioPosible], jugada: Jugada) =>
         escenariosPosibles.flatMap{(escenarioPosible) =>
           jugada.escenariosPosibles(montoApostado, distribucion).map((escenario) =>
               escenario.copy(monto = escenarioPosible.monto - montoApostado + escenario.monto,

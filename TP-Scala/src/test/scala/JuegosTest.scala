@@ -8,7 +8,7 @@ class JuegosTest extends FlatSpec with Matchers {
 
     val apuesta = Apuesta(1000, List(jugarACara))
 
-    val distribucionResultado = DistribucionResultados(Set(EscenarioPosible(10, 1.0)))
+    val distribucionResultado = DistribucionResultados(List(EscenarioPosible(10, 1.0)))
 
     distribucionResultado.obtenerResultadosPosiblesPara(apuesta, distribucionPerdedora) should be(distribucionResultado)
   }
@@ -20,9 +20,9 @@ class JuegosTest extends FlatSpec with Matchers {
 
     val apuesta = Apuesta(1000, List(jugarACara))
 
-    val distribucionResultado = DistribucionResultados(Set(EscenarioPosible(100000, 1.0)))
+    val distribucionResultado = DistribucionResultados(List(EscenarioPosible(100000, 1.0)))
 
-    distribucionResultado.obtenerResultadosPosiblesPara(apuesta, distribucion) should be(DistribucionResultados(Set(EscenarioPosible(101000, 0.75), EscenarioPosible(99000, 0.25))))
+    distribucionResultado.obtenerResultadosPosiblesPara(apuesta, distribucion) should be(DistribucionResultados(List(EscenarioPosible(101000, 0.75), EscenarioPosible(99000, 0.25))))
   }
 
   "Al apostar " should  " excluir resultados imposibles" in{
@@ -32,9 +32,9 @@ class JuegosTest extends FlatSpec with Matchers {
 
     val apuesta = Apuesta(1000, List(jugarACara))
 
-    val distribucionResultado = DistribucionResultados(Set(EscenarioPosible(100000, 1.0)))
+    val distribucionResultado = DistribucionResultados(List(EscenarioPosible(100000, 1.0)))
 
-    distribucionResultado.obtenerResultadosPosiblesPara(apuesta, distribucion) should be(DistribucionResultados(Set(EscenarioPosible(101000, 1.0))))
+    distribucionResultado.obtenerResultadosPosiblesPara(apuesta, distribucion) should be(DistribucionResultados(List(EscenarioPosible(101000, 1.0))))
   }
 
   "Al jugar múltiples veces " should  " multiplicar probabilidades" in{
@@ -44,12 +44,13 @@ class JuegosTest extends FlatSpec with Matchers {
 
     val apuesta = Apuesta(1000, List(jugarACara))
 
-    val distribucionResultado = DistribucionResultados(Set(EscenarioPosible(100000, 1.0)))
+    val distribucionResultado = DistribucionResultados(List(EscenarioPosible(100000, 1.0)))
 
     val distribucionResultado2 = distribucionResultado.obtenerResultadosPosiblesPara(apuesta, distribucion)
 
     distribucionResultado2.obtenerResultadosPosiblesPara(apuesta, distribucion) should be(DistribucionResultados(
-      Set(EscenarioPosible(102000, 0.5625),
+      List(EscenarioPosible(102000, 0.5625),
+          EscenarioPosible(100000, 0.1875),
           EscenarioPosible(100000, 0.1875),
           EscenarioPosible(98000,  0.0625))))
   }
@@ -61,12 +62,12 @@ class JuegosTest extends FlatSpec with Matchers {
 
     val apuesta = Apuesta(1000, List(jugarACara))
 
-    val distribucionResultado = DistribucionResultados(Set(EscenarioPosible(1000, 1.0)))
+    val distribucionResultado = DistribucionResultados(List(EscenarioPosible(1000, 1.0)))
 
     val distribucionResultado2 = distribucionResultado.obtenerResultadosPosiblesPara(apuesta, distribucion)
 
     distribucionResultado2.obtenerResultadosPosiblesPara(apuesta, distribucion) should be(DistribucionResultados(
-      Set(EscenarioPosible(3000, 0.5625),
+      List(EscenarioPosible(3000, 0.5625),
         EscenarioPosible(1000, 0.1875),
         EscenarioPosible(0,  0.25))))
   }
@@ -79,10 +80,10 @@ class JuegosTest extends FlatSpec with Matchers {
 
     val apuestaCompuesta = Apuesta(1000, List(jugarAlRojo, jugarAlTres))
 
-    val distribucionResultado = DistribucionResultados(Set(EscenarioPosible(100000, 1.0)))
+    val distribucionResultado = DistribucionResultados(List(EscenarioPosible(100000, 1.0)))
 
     distribucionResultado.obtenerResultadosPosiblesPara(apuestaCompuesta, distribucion) should be (DistribucionResultados(
-      Set(EscenarioPosible(136000, 0.013148),
+      List(EscenarioPosible(136000, 0.013148),
           EscenarioPosible(100000, 0.473338),
           EscenarioPosible(134000, 0.013879),
           EscenarioPosible(98000,  0.499635))))

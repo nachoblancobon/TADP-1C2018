@@ -13,8 +13,8 @@ sealed trait Jugada{
     }
   }
 
-  def escenariosPosibles(montoApostado: Int, distribucionProbabilidad: DistribucionProbabilidad): Set[EscenarioPosible] =
-    Set(
+  def escenariosPosibles(montoApostado: Int, distribucionProbabilidad: DistribucionProbabilidad): List[EscenarioPosible] =
+    List(
       EscenarioPosible(montoVictoria(montoApostado), probabilidadVictoria(distribucionProbabilidad)),
       EscenarioPosible(0, DoubleFormatter.format(1.0 - probabilidadVictoria(distribucionProbabilidad)))
     )
