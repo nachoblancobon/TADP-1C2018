@@ -1,3 +1,4 @@
+/*
 import Estrategias._
 
 case class Jugador(monto:Int, estrategia: EstrategiaEleccion){
@@ -5,7 +6,6 @@ case class Jugador(monto:Int, estrategia: EstrategiaEleccion){
 
   def jugar(apuestas:Apuestas):Jugador = copy(monto = apuestas.jugar(monto))
 }
-
 object Jugadores{
   val jugadorRacional: (Int => Jugador) = monto => Jugador(monto, EstrategiaRacional)
   val jugadorArriesgado: (Int => Jugador) = monto => Jugador(monto, EstrategiaArriesgada)
@@ -28,3 +28,4 @@ object Estrategias{
   }
 }
 
+*/
