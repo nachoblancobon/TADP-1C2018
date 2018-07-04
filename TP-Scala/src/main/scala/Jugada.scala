@@ -23,28 +23,28 @@ sealed trait Jugada{
 }
 
 object DoubleFormatter{
-  def format(probabilidad:Double) = BigDecimal(probabilidad).setScale(6, BigDecimal.RoundingMode.HALF_UP).toDouble
+  def format(probabilidad:Double):Double = BigDecimal(probabilidad).setScale(6, BigDecimal.RoundingMode.HALF_UP).toDouble
 }
 
-case class JugarACara() extends Jugada{
-  override val sucesosVictoriosos: List[Suceso] = List(Cara())
+case object JugarACara extends Jugada{
+  override val sucesosVictoriosos: List[Suceso] = List(Cara)
 
   override def montoVictoria(monto: Int): Int = 2 * monto
 }
 
-case class JugarACruz() extends Jugada{
-  override val sucesosVictoriosos: List[Suceso] = List(Cruz())
+case object JugarACruz extends Jugada{
+  override val sucesosVictoriosos: List[Suceso] = List(Cruz)
 
   override def montoVictoria(monto: Int): Int = 2 * monto
 }
 
-case class JugarAlRojo() extends Jugada{
+case object JugarAlRojo extends Jugada{
   override val sucesosVictoriosos: List[Suceso] = List(1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36).map(SucesoRuleta)
 
   override def montoVictoria(monto: Int): Int = 2 * monto
 }
 
-case class JugarAlNegro() extends Jugada{
+case object JugarAlNegro extends Jugada{
   override val sucesosVictoriosos: List[Suceso] = List(2,4,6,8,10,11,13,15,17,20,22,24,26,28,29,31,33,35).map(SucesoRuleta)
 
   override def montoVictoria(monto: Int): Int = 2 * monto
@@ -56,13 +56,13 @@ case class JugarNumero(numero: Int) extends Jugada{
   override def montoVictoria(monto: Int): Int = 36 * monto
 }
 
-case class JugarPar() extends Jugada{
+case object JugarPar extends Jugada{
   override val sucesosVictoriosos: List[Suceso] = (2 to 36 by 2 toList).map(SucesoRuleta)
 
   override def montoVictoria(monto: Int): Int = 2 * monto
 }
 
-case class JugarImpar() extends Jugada{
+case object JugarImpar extends Jugada{
   override val sucesosVictoriosos: List[Suceso] = (1 to 35 by 2 toList).map(SucesoRuleta)
 
   override def montoVictoria(monto: Int): Int = 2 * monto

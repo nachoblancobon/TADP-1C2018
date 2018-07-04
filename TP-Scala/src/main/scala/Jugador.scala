@@ -1,9 +1,7 @@
 import Estrategias._
 
 case class Jugador(monto:Int, estrategia: EstrategiaEleccion){
-  def elegirJuegos(apuestas: List[Apuestas]):Apuestas = estrategia.apply(monto, apuestas)
-
-  def jugar(apuestas:Apuestas):Jugador = copy(monto = apuestas.jugar(monto))
+  def elegirJuegos(apuestas: List[PlanDeJuego]):PlanDeJuego = estrategia.apply(monto, apuestas)
 }
 
 object Jugadores{
@@ -13,18 +11,18 @@ object Jugadores{
 }
 
 object Estrategias{
-  type EstrategiaEleccion = (Int, List[Apuestas]) => Apuestas
+  type EstrategiaEleccion = (Int, List[PlanDeJuego]) => PlanDeJuego
 
   object EstrategiaRacional extends EstrategiaEleccion{
-    def apply(monto:Int, apuestas: List[Apuestas]): Apuestas = apuestas.maxBy(_.resultadosPosibles(monto).escenarios.map(_.gananciaPonderada).sum)
+    def apply(monto:Int, apuestas: List[PlanDeJuego]): PlanDeJuego = apuestas.maxBy(_.resultadosPosibles(monto).escenarios.map(_.gananciaPonderada).sum)
   }
 
   object EstrategiaArriesgada extends EstrategiaEleccion{
-    def apply(monto:Int, apuestas: List[Apuestas]): Apuestas = apuestas.maxBy(_.resultadosPosibles(monto).escenarios.map(_.monto).max)
+    def apply(monto:Int, apuestas: List[PlanDeJuego]): PlanDeJuego = apuestas.maxBy(_.resultadosPosibles(monto).escenarios.map(_.monto).max)
   }
 
   object EstrategiaCauta extends EstrategiaEleccion{
-    def apply(monto:Int, apuestas: List[Apuestas]): Apuestas = apuestas.maxBy(_.resultadosPosibles(monto).probabilidadDeSalirHecho(monto))
+    def apply(monto:Int, apuestas: List[PlanDeJuego]): PlanDeJuego = apuestas.maxBy(_.resultadosPosibles(monto).probabilidadDeSalirHecho(monto))
   }
 }
 

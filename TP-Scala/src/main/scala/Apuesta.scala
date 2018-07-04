@@ -1,40 +1,39 @@
-case class Apuesta(montoApostado: Int, jugadas: List[Jugada]){
-  def jugar(juego: Juego): Int = {
-    montoApostado match {
-      case 0 => 0
-      case _ => jugadas.map(_.jugar(juego.proximoResultado, montoApostado)).sum
-    }
-  }
+sealed trait Apuesta{
+  def montoApostado:Int
+  def puedeJugarse(montoDisponible:Int): Boolean = montoApostado <= montoDisponible
+
+  def apuestas: List[ApuestaSimple]
 }
 
-case class Apuestas(apuestas: List[Apuesta], juegos: List[Juego]){
-  require(apuestas.lengthCompare(juegos.size) == 0)
-  def resultadosPosibles(montoInicial: Int): DistribucionResultados = apuestas.zip(juegos)
-    .foldLeft(DistribucionResultados(List(EscenarioPosible(montoInicial)))) { (resultadoAnterior, apuestaJuego) => {
-      val (apuesta, juego) = apuestaJuego
+case class ApuestaSimple(montoApostado: Int, jugada: Jugada) extends Apuesta {
+  override def apuestas: List[ApuestaSimple] = List(this)
 
-      resultadoAnterior.obtenerResultadosPosiblesPara(apuesta, juego.distribucionResultados)
-    }
-  }
+  def escenariosPosibles(distribucion: DistribucionProbabilidad): List[EscenarioPosible] =
+    jugada.escenariosPosibles(montoApostado, distribucion)
+}
 
-  def jugar(montoInicial:Int): Int = apuestas.zip(juegos)
-    .foldLeft(montoInicial) { (montoAnterior, apuestaJuego) => {
-        val (apuesta, juego) = apuestaJuego
+case class ApuestaCompuesta(apuestas: List[ApuestaSimple]) extends Apuesta{
+  val montoApostado:Int = apuestas.map(_.montoApostado).sum
+}
 
-        apuesta.jugar(juego)
+case class PlanDeJuego(juegos: List[Juego]) {
+  require(juegos.nonEmpty)
+
+  def resultadosPosibles(montoInicial: Int): DistribucionResultados =
+    juegos.foldLeft(DistribucionResultados(List(EscenarioPosible(montoInicial)))) {
+      (resultadoAnterior, juego) => {
+        resultadoAnterior.obtenerResultadosPosiblesPara(juego)
       }
     }
 }
 
-case class Juego(distribucionResultados: DistribucionProbabilidad){
-  def proximoResultado:Suceso = distribucionResultados.proximoSuceso()
-}
+case class Juego(apuesta: Apuesta, distribucionResultados: DistribucionProbabilidad){}
 
 case class DistribucionResultados(escenarios: List[EscenarioPosible]){
-  def obtenerResultadosPosiblesPara(apuesta: Apuesta, distribucion: DistribucionProbabilidad):DistribucionResultados =
+  def obtenerResultadosPosiblesPara(juego: Juego):DistribucionResultados =
     copy(escenarios = for {
       escenariosPosibles <- escenarios
-      escenario <- escenariosPosibles.jugar(apuesta.jugadas, apuesta.montoApostado, distribucion)
+      escenario <- escenariosPosibles.jugar(juego.apuesta, juego.distribucionResultados)
       if escenario.posible
     } yield escenario)
 
@@ -52,14 +51,14 @@ case class EscenarioPosible(monto: Int, probabilidad: Double = 1.0){
 
   val gananciaPonderada:Double = monto * probabilidad
 
-  def jugar(jugadas: List[Jugada], montoApostado: Int, distribucion: DistribucionProbabilidad): List[EscenarioPosible] =
-    if(monto < montoApostado){
+  def jugar(apuesta: Apuesta, distribucion: DistribucionProbabilidad): List[EscenarioPosible] =
+    if(!apuesta.puedeJugarse(monto)){
       List(this)
     }else{
-      jugadas.foldLeft(List(this)){ (escenariosPosibles: List[EscenarioPosible], jugada: Jugada) =>
+      apuesta.apuestas.foldLeft(List(this)){ (escenariosPosibles: List[EscenarioPosible], apuesta: ApuestaSimple) =>
         escenariosPosibles.flatMap{(escenarioPosible) =>
-          jugada.escenariosPosibles(montoApostado, distribucion).map((escenario) =>
-              escenario.copy(monto = escenarioPosible.monto - montoApostado + escenario.monto,
+          apuesta.escenariosPosibles(distribucion).map((escenario) =>
+              escenario.copy(monto = escenarioPosible.monto - apuesta.montoApostado + escenario.monto,
                              probabilidad = DoubleFormatter.format(escenario.probabilidad * escenarioPosible.probabilidad)))
         }
       }

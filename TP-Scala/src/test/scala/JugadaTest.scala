@@ -5,7 +5,7 @@ class JugadaTest extends FlatSpec with Matchers {
   ###############################################
   */
   "La probabilidad de ganar de JugarACara " should " depende de la Distribucion" in{
-    val jugarACara = JugarACara()
+    val jugarACara = JugarACara
     jugarACara.probabilidadVictoria(DistribucionCaraCruz(1)) should be(1.0)
     jugarACara.probabilidadVictoria(DistribucionCaraCruz(0.5)) should be(0.5)
     jugarACara.probabilidadVictoria(DistribucionCaraCruz(0.3)) should be(0.3)
@@ -13,7 +13,7 @@ class JugadaTest extends FlatSpec with Matchers {
   }
 
   "La probabilidad de ganar de JugarACruz " should " depende de la Distribucion" in{
-    val jugarACruz = JugarACruz()
+    val jugarACruz = JugarACruz
     jugarACruz.probabilidadVictoria(DistribucionCaraCruz(1)) should be(0.0)
     jugarACruz.probabilidadVictoria(DistribucionCaraCruz(0.5)) should be(0.5)
     jugarACruz.probabilidadVictoria(DistribucionCaraCruz(0.3)) should be(0.7)
@@ -21,17 +21,17 @@ class JugadaTest extends FlatSpec with Matchers {
   }
 
   "La probabilidad de ganar de JugarACara " should " con moneda cargada" in{
-    val jugarACara = JugarACara()
-    jugarACara.probabilidadVictoria(DistribucionProbabilidadFactory.distribucionCaraCruzCargada(4, 3)) should be(0.571429)
+    val jugarACara = JugarACara
+    jugarACara.probabilidadVictoria(DistribucionProbabilidadFactory.distribucionCaraCruzCargada(1, 2)) should be(0.666667)
   }
 
   "La probabilidad de ganar de JugarACruz " should " con moneda cargada" in{
-    val jugarACruz = JugarACruz()
-    jugarACruz.probabilidadVictoria(DistribucionProbabilidadFactory.distribucionCaraCruzCargada(4, 3)) should be(0.428571)
+    val jugarACruz = JugarACruz
+    jugarACruz.probabilidadVictoria(DistribucionProbabilidadFactory.distribucionCaraCruzCargada(1, 2)) should be(0.333333)
   }
 
   "La probabilidad de JugarAlRojo " should " depende de la Distribucion" in{
-    val jugarAlRojo = JugarAlRojo()
+    val jugarAlRojo = JugarAlRojo
 
     jugarAlRojo.probabilidadVictoria(DistribucionProbabilidadFactory.eventoSeguro(SucesoRuleta(1))) should be(1.0)
     jugarAlRojo.probabilidadVictoria(DistribucionProbabilidadFactory.eventoSeguro(SucesoRuleta(2))) should be(0)
@@ -40,7 +40,7 @@ class JugadaTest extends FlatSpec with Matchers {
   }
 
   "La probabilidad de JugarAlNegro " should " depende de la Distribucion" in{
-    val jugarAlNegro = JugarAlNegro()
+    val jugarAlNegro = JugarAlNegro
 
     jugarAlNegro.probabilidadVictoria(DistribucionProbabilidadFactory.eventoSeguro(SucesoRuleta(1))) should be(0)
     jugarAlNegro.probabilidadVictoria(DistribucionProbabilidadFactory.eventoSeguro(SucesoRuleta(2))) should be(1.0)
@@ -56,7 +56,7 @@ class JugadaTest extends FlatSpec with Matchers {
   }
 
   "La probabilidad de JugarPar " should " depende de la Distribucion" in{
-    val jugarPar = JugarPar()
+    val jugarPar = JugarPar
 
     jugarPar.probabilidadVictoria(DistribucionProbabilidadFactory.eventoSeguro(SucesoRuleta(1))) should be(0)
     jugarPar.probabilidadVictoria(DistribucionProbabilidadFactory.eventoSeguro(SucesoRuleta(2))) should be(1.0)
@@ -65,7 +65,7 @@ class JugadaTest extends FlatSpec with Matchers {
   }
 
   "La probabilidad de JugarImpar " should " depende de la Distribucion" in{
-    val jugarImpar = JugarImpar()
+    val jugarImpar = JugarImpar
 
     jugarImpar.probabilidadVictoria(DistribucionProbabilidadFactory.eventoSeguro(SucesoRuleta(1))) should be(1.0)
     jugarImpar.probabilidadVictoria(DistribucionProbabilidadFactory.eventoSeguro(SucesoRuleta(2))) should be(0)
@@ -100,7 +100,7 @@ class JugadaTest extends FlatSpec with Matchers {
   */
 
   "Los escenarios posibles de JugarACara " should " son duplicar monto o perder todo" in{
-    val jugarACara = JugarACara()
+    val jugarACara = JugarACara
 
     jugarACara.escenariosPosibles(10, DistribucionCaraCruz(1)) should be(List(EscenarioPosible(20, 1.0), EscenarioPosible(0, 0.0)))
     jugarACara.escenariosPosibles(10,DistribucionCaraCruz(0.5)) should be(List(EscenarioPosible(20, 0.5), EscenarioPosible(0, 0.5)))
@@ -109,7 +109,7 @@ class JugadaTest extends FlatSpec with Matchers {
   }
 
   "Los escenarios posibles de JugarACruz " should " son duplicar monto o perder todo" in{
-    val jugarACruz = JugarACruz()
+    val jugarACruz = JugarACruz
 
     jugarACruz.escenariosPosibles(10, DistribucionCaraCruz(1)) should be(List(EscenarioPosible(20, 0.0), EscenarioPosible(0, 1.0)))
     jugarACruz.escenariosPosibles(10,DistribucionCaraCruz(0.5)) should be(List(EscenarioPosible(20, 0.5), EscenarioPosible(0, 0.5)))
@@ -118,7 +118,7 @@ class JugadaTest extends FlatSpec with Matchers {
   }
 
   "Los escenarios posibles de JugarAlRojo " should " son duplicar monto o perder todo" in{
-    val jugarAlRojo = JugarAlRojo()
+    val jugarAlRojo = JugarAlRojo
 
     jugarAlRojo.escenariosPosibles(10, DistribucionProbabilidadFactory.eventoSeguro(SucesoRuleta(1))) should be(List(EscenarioPosible(20, 1.0), EscenarioPosible(0, 0.0)))
     jugarAlRojo.escenariosPosibles(10, DistribucionProbabilidadFactory.eventoSeguro(SucesoRuleta(2))) should be(List(EscenarioPosible(20, 0.0), EscenarioPosible(0, 1.0)))
@@ -127,7 +127,7 @@ class JugadaTest extends FlatSpec with Matchers {
   }
 
   "Los escenarios posibles de JugarAlNegro " should " son duplicar monto o perder todo" in{
-    val jugarAlNegro = JugarAlNegro()
+    val jugarAlNegro = JugarAlNegro
 
     jugarAlNegro.escenariosPosibles(10, DistribucionProbabilidadFactory.eventoSeguro(SucesoRuleta(1))) should be(List(EscenarioPosible(20, 0.0), EscenarioPosible(0, 1.0)))
     jugarAlNegro.escenariosPosibles(10, DistribucionProbabilidadFactory.eventoSeguro(SucesoRuleta(2))) should be(List(EscenarioPosible(20, 1.0), EscenarioPosible(0, 0.0)))
@@ -143,7 +143,7 @@ class JugadaTest extends FlatSpec with Matchers {
   }
 
   "Los escenarios posibles de JugarPar " should " son duplicar monto o perder todo" in{
-    val jugarPar = JugarPar()
+    val jugarPar = JugarPar
 
     jugarPar.escenariosPosibles(10, DistribucionProbabilidadFactory.eventoSeguro(SucesoRuleta(1))) should be(List(EscenarioPosible(20, 0.0), EscenarioPosible(0, 1.0)))
     jugarPar.escenariosPosibles(10, DistribucionProbabilidadFactory.eventoSeguro(SucesoRuleta(2))) should be(List(EscenarioPosible(20, 1.0), EscenarioPosible(0, 0.0)))
@@ -152,7 +152,7 @@ class JugadaTest extends FlatSpec with Matchers {
   }
 
   "Los escenarios posibles de JugarImpar " should " son duplicar monto o perder todo" in{
-    val jugarImpar = JugarImpar()
+    val jugarImpar = JugarImpar
 
     jugarImpar.escenariosPosibles(10, DistribucionProbabilidadFactory.eventoSeguro(SucesoRuleta(1))) should be(List(EscenarioPosible(20, 1.0), EscenarioPosible(0, 0.0)))
     jugarImpar.escenariosPosibles(10, DistribucionProbabilidadFactory.eventoSeguro(SucesoRuleta(2))) should be(List(EscenarioPosible(20, 0.0), EscenarioPosible(0, 1.0)))
