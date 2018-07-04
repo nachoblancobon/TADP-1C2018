@@ -9,4 +9,4 @@ case class SucesoRuleta(numero: Int) extends Suceso {
   require(numero >= 0 && numero < 37)
 }
 
-case class SucesoRuletaPonderado(sucesoRuleta: SucesoRuleta, peso:Int)
+case class SucesoRuletaPonderado(sucesoRuleta: SucesoRuleta, peso:Int){}
