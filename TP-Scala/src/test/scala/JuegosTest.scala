@@ -92,6 +92,26 @@ class JuegosTest extends FlatSpec with Matchers {
         EscenarioPosible(98000, 0.499635))))
   }
 
+  "plan de juegos " should " jugar muchos juegos" in{
+    val distribucion = DistribucionProbabilidadFactory.distribucionEquiprobableRuleta
+    val distribucionCaraCruz = DistribucionCaraCruz(0.5)
+
+    val jugarAlCero = JugarNumero(0)
+    val jugarACara = JugarACara
+
+    val apuesta1 = ApuestaCompuesta(List( ApuestaSimple(10, jugarACara)))
+    val apuesta2 = ApuestaCompuesta(List( ApuestaSimple(15, jugarAlCero)))
+
+    val planDeJuego= PlanDeJuego(List(Juego(apuesta1, distribucionCaraCruz), Juego(apuesta2, distribucion)))
+
+    planDeJuego.resultadosPosibles(15) should be (DistribucionResultados(
+      List(
+        EscenarioPosible(550,0.013514),
+        EscenarioPosible(10,0.486487),
+        EscenarioPosible(5,0.5))
+    ))
+  }
+  /*
   "Las distribuciones ponderadas " should " dar mayor probabilidad al menor peso" in {
     var distribucion = DistribucionProbabilidadFactory.distribucionPonderada(List(SucesoRuletaPonderado(SucesoRuleta(3), 2)))
 
@@ -109,26 +129,27 @@ class JuegosTest extends FlatSpec with Matchers {
     distribucion.probabilidadDe(SucesoRuleta(6)) should be(0.4)
   }
 
-  "Si le jugamos 25 al rojo 10 a la 2da decena y 30 al numero 23" should "devolver como en el enunciado0 in"{
+  */
+  "Si le jugamos 25 al rojo 10 a la 2da decena y 30 al numero 23" should "devolver como en el enunciado0 "in{
     val distribucion = DistribucionProbabilidadFactory.distribucionEquiprobableRuleta
 
     val jugarAlRojo = JugarAlRojo
     val jugarAl23 = JugarNumero(23)
     val jugar2daDecena = JugarDecena(2)
 
-    val apuestaCompuesta = ApuestaCompuesta(List(ApuestaSimple(25, jugarAlRojo), ApuestaSimple(10, jugarAl23), ApuestaSimple(30, jugar2dsDecena)))
+    val apuestaCompuesta = ApuestaCompuesta(List(ApuestaSimple(25, jugarAlRojo), ApuestaSimple(30, jugarAl23), ApuestaSimple(10, jugar2daDecena)))
 
-    val distribucionResultado = DistribucionResultados(List(EscenariosPosibles(65, 1.0)))
+    val distribucionResultado = DistribucionResultados(List(EscenarioPosible(65, 1.0)))
 
-    distribucionResultado.obtenerResultadosPosiblesPara(List(apuestaCompuesta)) should be(DistribucionResultados(
+    distribucionResultado.obtenerResultadosPosiblesPara(Juego(apuestaCompuesta, distribucion)) should be(DistribucionResultados(
       List(
-        EscenarioPosible(1160, 0.004264),
-        EscenarioPosible(80, 0.153515),
-        EscenarioPosible(1130, 0.008884),
-        EscenarioPosible(50, 0.319823),
-        EscenarioPosible(1110, 0.004501),
-        EscenarioPosible(30, 0.162044),
-        EscenarioPosible(1080, 0.009378),
-        EscenarioPosible(0, 0.337591))))
+        EscenarioPosible(1160,0.004264),
+        EscenarioPosible(1130,0.008884),
+        EscenarioPosible(80,0.153515),
+        EscenarioPosible(50,0.319823),
+        EscenarioPosible(1110,0.004501),
+        EscenarioPosible(1080,0.009378),
+        EscenarioPosible(30,0.162044),
+        EscenarioPosible(0,0.337591))))
   }
 }
