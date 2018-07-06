@@ -94,6 +94,7 @@ class JugadaTest extends FlatSpec with Matchers {
     jugarDecena2.probabilidadVictoria(DistribucionProbabilidadFactory.distribucionEquiprobableRuleta) should be(DoubleFormatter.format(12.0/37.0))
     jugarDecena3.probabilidadVictoria(DistribucionProbabilidadFactory.distribucionEquiprobableRuleta) should be(DoubleFormatter.format(12.0/37.0))
   }
+  
 
   /* Escenarios posibles
   ###############################################

@@ -102,7 +102,7 @@ class JuegosTest extends FlatSpec with Matchers {
     val apuesta1 = ApuestaCompuesta(List( ApuestaSimple(10, jugarACara)))
     val apuesta2 = ApuestaCompuesta(List( ApuestaSimple(15, jugarAlCero)))
 
-    val planDeJuego= PlanDeJuego(List(Juego(apuesta1, distribucionCaraCruz), Juego(apuesta2, distribucion)))
+    val planDeJuego = PlanDeJuego(List(Juego(apuesta1, distribucionCaraCruz), Juego(apuesta2, distribucion)))
 
     planDeJuego.resultadosPosibles(15) should be (DistribucionResultados(
       List(
@@ -112,21 +112,21 @@ class JuegosTest extends FlatSpec with Matchers {
     ))
   }
   /*
-  "Las distribuciones ponderadas " should " dar mayor probabilidad al menor peso" in {
-    var distribucion = DistribucionProbabilidadFactory.distribucionPonderada(List(SucesoRuletaPonderado(SucesoRuleta(3), 2)))
+  "Las distribuciones ponderadas " should " dar mayor probabilidad al mayor peso" in {
+    var distribucion = DistribucionPonderada(List(SucesoPonderado(SucesoRuleta(3), 2)))
 
     distribucion.probabilidadDe(SucesoRuleta(3)) should be(1.0)
 
-    distribucion = DistribucionProbabilidadFactory.distribucionPonderada(List(SucesoRuletaPonderado(SucesoRuleta(3), 2), SucesoRuletaPonderado(SucesoRuleta(5), 3)))
+    distribucion = DistribucionPonderada(List(SucesoPonderado(SucesoRuleta(3), 2), SucesoPonderado(SucesoRuleta(5), 3)))
 
-    distribucion.probabilidadDe(SucesoRuleta(3)) should be(0.6)
+    distribucion.probabilidadDe(SucesoRuleta(3)) should be(0.4)
+    distribucion.probabilidadDe(SucesoRuleta(5)) should be(0.6)
+
+    distribucion = DistribucionPonderada(List(SucesoPonderado(SucesoRuleta(3), 2), SucesoPonderado(SucesoRuleta(5), 3), SucesoPonderado(SucesoRuleta(6), 5)))
+
+    distribucion.probabilidadDe(SucesoRuleta(6)) should be(0.8)
     distribucion.probabilidadDe(SucesoRuleta(5)) should be(0.4)
-
-    distribucion = DistribucionProbabilidadFactory.distribucionPonderada(List(SucesoRuletaPonderado(SucesoRuleta(3), 2), SucesoRuletaPonderado(SucesoRuleta(5), 3), SucesoRuletaPonderado(SucesoRuleta(6), 5)))
-
-    distribucion.probabilidadDe(SucesoRuleta(3)) should be(0.8)
-    distribucion.probabilidadDe(SucesoRuleta(5)) should be(0.4)
-    distribucion.probabilidadDe(SucesoRuleta(6)) should be(0.4)
+    distribucion.probabilidadDe(SucesoRuleta(3)) should be(0.4)
   }
 
   */

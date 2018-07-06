@@ -31,6 +31,16 @@ case class DistribucionCaraCruz(probabilidadCara: Double = 0.5) extends Distribu
     List(ProbabilidadSuceso(Cara, RangoProbabilidad(0, probabilidadCara)), ProbabilidadSuceso(Cruz, RangoProbabilidad(0, 1 - probabilidadCara)))
 }
 
+/*case class DistribucionPonderada(sucesos: List[SucesoPonderado]) extends DistribucionProbabilidad{
+  require(sucesos.nonEmpty)
+ //a mayor peso mayor probabilidad
+  override def probabilidadDe(suceso: Suceso): Double = sucesos.find(_.suceso == suceso) match{
+    case Some(suc) => suc.peso / sucesos.map(_.peso).sum
+    case None => 0.0
+  }
+   override protected val probalidadesSucesos: List[ProbabilidadSuceso] = probabilidadesSuceso
+}*/
+
 object DistribucionProbabilidadFactory{
   def eventoSeguro(suceso: Suceso):DistribucionProbabilidad = suceso match {
     case Cara => DistribucionCaraCruz(1)
@@ -66,6 +76,7 @@ object DistribucionProbabilidadFactory{
       }))
     }
   }
+
 
   val distribucionEquiprobableCaraCruz:DistribucionProbabilidad = DistribucionCaraCruz()
   val distribucionEquiprobableRuleta:DistribucionProbabilidad = DistribucionProbabilidadFactory.distribucionEquiprobable((0 to 36 toList).map(SucesoRuleta))
