@@ -9,7 +9,7 @@ sealed trait DistribucionProbabilidad{
 }
 
 case class DistribucionProbabilidadBase(probabilidadesSucesos : List[ProbabilidadSuceso]) extends DistribucionProbabilidad {
-  require(probabilidadesSucesos.map(_.probabilidad).sum == 1)
+//  require(probabilidadesSucesos.map(_.probabilidad).sum == 1)
 
   override def probabilidadDe(suceso: Suceso): Double = probabilidadesSucesos.find(_.matcheaSuceso(suceso))
     .map(_.probabilidad)
@@ -60,7 +60,7 @@ object DistribucionProbabilidadFactory{
 
       DistribucionProbabilidadBase(sucesosPosibles.map((suceso) => {
         val inicio = inicioIntervalo
-        val fin = inicioIntervalo + 1 - 1.0 * suceso.peso / pesoTotal
+        val fin = inicioIntervalo + 1.0 * suceso.peso / pesoTotal
         inicioIntervalo = fin
         ProbabilidadSuceso(suceso.sucesoRuleta, RangoProbabilidad(inicio, fin))
       }))
