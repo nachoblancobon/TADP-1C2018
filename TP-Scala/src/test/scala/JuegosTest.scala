@@ -111,7 +111,6 @@ class JuegosTest extends FlatSpec with Matchers {
         EscenarioPosible(5,0.5))
     ))
   }
-  /*
   "Las distribuciones ponderadas " should " dar mayor probabilidad al menor peso" in {
     var distribucion = DistribucionProbabilidadFactory.distribucionPonderada(List(SucesoRuletaPonderado(SucesoRuleta(3), 2)))
 
@@ -122,14 +121,15 @@ class JuegosTest extends FlatSpec with Matchers {
     distribucion.probabilidadDe(SucesoRuleta(3)) should be(0.6)
     distribucion.probabilidadDe(SucesoRuleta(5)) should be(0.4)
 
+    /*
     distribucion = DistribucionProbabilidadFactory.distribucionPonderada(List(SucesoRuletaPonderado(SucesoRuleta(3), 2), SucesoRuletaPonderado(SucesoRuleta(5), 3), SucesoRuletaPonderado(SucesoRuleta(6), 5)))
 
     distribucion.probabilidadDe(SucesoRuleta(3)) should be(0.8)
     distribucion.probabilidadDe(SucesoRuleta(5)) should be(0.4)
     distribucion.probabilidadDe(SucesoRuleta(6)) should be(0.4)
+    */
   }
 
-  */
   "Si le jugamos 25 al rojo 10 a la 2da decena y 30 al numero 23" should "devolver como en el enunciado0 "in{
     val distribucion = DistribucionProbabilidadFactory.distribucionEquiprobableRuleta
 

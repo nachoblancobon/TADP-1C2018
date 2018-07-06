@@ -8,6 +8,7 @@ object Jugadores{
   val jugadorRacional: (Int => Jugador) = monto => Jugador(monto, EstrategiaRacional)
   val jugadorArriesgado: (Int => Jugador) = monto => Jugador(monto, EstrategiaArriesgada)
   val jugadorCauto: (Int => Jugador) = monto => Jugador(monto, EstrategiaCauta)
+  val jugadorVeloz: (Int => Jugador) = monto => Jugador(monto, EstrategiaVeloz)
 }
 
 object Estrategias{
@@ -23,6 +24,10 @@ object Estrategias{
 
   object EstrategiaCauta extends EstrategiaEleccion{
     def apply(monto:Int, apuestas: List[PlanDeJuego]): PlanDeJuego = apuestas.maxBy(_.resultadosPosibles(monto).probabilidadDeSalirHecho(monto))
+  }
+
+  object EstrategiaVeloz extends EstrategiaEleccion {
+    def apply(monto: Int, apuestas: List[PlanDeJuego]): PlanDeJuego = apuestas.head
   }
 }
 

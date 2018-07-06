@@ -12,9 +12,11 @@ class JugadorTest extends FlatSpec with Matchers {
     val jugadorRacional = Jugadores.jugadorRacional(20)
     val jugadorArriesgado = Jugadores.jugadorArriesgado(20)
     val jugadorCauto = Jugadores.jugadorCauto(20)
+    val jugadorVeloz = Jugadores.jugadorVeloz(20)
 
     jugadorRacional.elegirJuegos(List(apuestas1, apuestas2)) should be(apuestas1)
     jugadorArriesgado.elegirJuegos(List(apuestas1, apuestas2)) should be(apuestas2)
     jugadorCauto.elegirJuegos(List(apuestas1, apuestas2)) should be(apuestas1)
+    jugadorVeloz.elegirJuegos(List(apuestas1, apuestas2)) should be(apuestas1)
   }
 }
